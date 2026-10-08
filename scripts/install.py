@@ -44,11 +44,11 @@ def main():
     env_path = target(options.env_file)
     if not env_path.exists():
         env_path = copy(SOURCE / "deploy/archive.env.example", options.env_file, 0o640)
+    config = load_config(read_env_file(env_path))
+    config.validate()
     env_path.chmod(0o640)
     if user:
         os.chown(env_path, 0, user.pw_gid)
-    config = load_config(read_env_file(env_path))
-    config.validate()
     state = target(config.root)
     state.mkdir(parents=True, exist_ok=True)
     state.chmod(0o700)

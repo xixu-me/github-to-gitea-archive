@@ -79,6 +79,26 @@ class Config:
                 raise ValueError(
                     "ARCHIVE_SNAPSHOT_PATHS must contain absolute paths without parent traversal"
                 )
+        protected = {
+            Path(p).resolve()
+            for p in (
+                "/",
+                "/etc",
+                "/usr",
+                "/var",
+                "/var/lib",
+                "/home",
+                "/root",
+                "/opt",
+                "/tmp",
+                "/Users",
+            )
+        }
+        protected.add(Path.home().resolve())
+        if self.root.resolve() in protected:
+            raise ValueError(
+                "ARCHIVE_ROOT must be a dedicated data directory, not a system directory or home"
+            )
         if not 1 <= self.port <= 65535:
             raise ValueError("ARCHIVE_PORT must be between 1 and 65535")
         if (

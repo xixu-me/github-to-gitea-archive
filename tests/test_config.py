@@ -48,6 +48,7 @@ class ConfigurationTests(unittest.TestCase):
             ("ARCHIVE_ADMIN_USER", "x/y"),
             ("ARCHIVE_PORT", "70000"),
             ("ARCHIVE_ROOT", "relative"),
+            ("ARCHIVE_ROOT", "/"),
             ("GITEA_DB_PATH", "/srv/../etc/db"),
             ("GITEA_URL", "https://user:password@example.test"),
             ("ARCHIVE_PUBLIC_URL", "http://example.test"),

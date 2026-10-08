@@ -9,6 +9,20 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class InstallerTests(unittest.TestCase):
+    def test_invalid_config_is_rejected_before_changing_existing_permissions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            config = Path(directory) / "etc/gitea/github-archive.env"
+            config.parent.mkdir(parents=True)
+            config.write_text("GITHUB_OWNER=example\nARCHIVE_ROOT=/\n")
+            config.chmod(0o644)
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "scripts/install.py"), "--root", directory],
+                capture_output=True,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(config.stat().st_mode & 0o777, 0o644)
+            self.assertFalse((Path(directory) / "usr/local/lib/github-archive").exists())
+
     def test_staged_install_preserves_custom_config_and_renders_sandbox_and_ports(self):
         with tempfile.TemporaryDirectory() as directory:
             stage = Path(directory)
