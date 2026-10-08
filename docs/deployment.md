@@ -8,7 +8,7 @@ Create a **dedicated** Gitea archive user or organization through its administra
 
 Merge the settings in [`deploy/gitea-settings.ini`](../deploy/gitea-settings.ini) into the existing Gitea `app.ini`; retain all database paths and secrets. This enables SQLite WAL and disables self-registration, OpenID signup and OAuth auto-registration. Restart Gitea after backing up its configuration.
 
-Create a Gitea API token for the human/service **user** that manages the archive. Give it repository read/write permissions for the target namespace; dashboard authentication uses that same user's login. When the target is an organization, set `GITEA_OWNER` to the organization and `ARCHIVE_ADMIN_USER` to the managing user. These tokens do not require Gitea administrator API access.
+Create a Gitea API token for the human/service **user** that manages the archive. Give it repository read/write permissions for the target namespace and `read:user` permission for authenticated profile checks; dashboard authentication uses that same user's login. When the target is an organization, set `GITEA_OWNER` to the organization and `ARCHIVE_ADMIN_USER` to the managing user. These tokens do not require Gitea administrator API access.
 
 ## 2. Install and configure
 
@@ -37,7 +37,7 @@ sudo -u git /usr/local/lib/github-archive/archive.py --env-file /etc/gitea/githu
 
 Install Nginx with the `auth_request` module. Include `/etc/nginx/snippets/github-archive.conf` **inside the existing HTTPS Gitea server block**, replacing its previous `location /` definition. Adapt its Gitea upstream if it differs from port 3000. The installer renders the archive backend port.
 
-The snippet supplies all archive routes and places `auth_request /_github_archive_privacy` on native Gitea pages and API routes. Do not add another unguarded `location` for repositories/API; that would bypass privatization protection. Keep Gitea and the Python backend private to the host, close external access to their ports, and terminate HTTPS at Nginx. The archive trusts `X-Archive-User` only because Nginx overwrites it after authenticating through Gitea.
+The snippet supplies all archive routes and places `auth_request /_github_archive_privacy` on native Gitea pages and API routes. Do not add another unguarded `location` for repositories/API; that would bypass privatization protection. Keep Gitea and the Python backend private to the host, close external access to their ports, and terminate HTTPS at Nginx. The archive validates Gitea credentials again at the backend and never accepts `X-Archive-User` as proof of identity. Preserve Cookie/Authorization headers as in the snippet.
 
 ```sh
 sudo systemctl enable --now github-archive-web.service

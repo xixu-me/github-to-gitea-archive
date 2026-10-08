@@ -20,8 +20,6 @@ def main():
     paths = [ROOT / name.decode() for name in result.stdout.split(b"\0") if name]
     failures = []
     for path in paths:
-        if path.name == Path(__file__).name:
-            continue  # The deny-list itself necessarily names forbidden examples.
         if (
             path.name in ("app.json", "webhook-secret")
             or path.suffix in (".pem", ".key", ".db", ".tgz")

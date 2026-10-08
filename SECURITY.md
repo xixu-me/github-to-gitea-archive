@@ -4,7 +4,7 @@ For vulnerabilities that could expose private repositories, tokens or archive re
 
 The supported security configuration uses one dedicated local archive namespace, loopback-only backends, HTTPS Nginx with the included authentication/privacy guard, a read-only GitHub App/PAT, a scoped Gitea repository token, a private 0700 state directory and restricted environment/key permissions. Gitea itself must be maintained and self-registration disabled for a personal archive deployment.
 
-The backend's `X-Archive-User` is a reverse-proxy trust boundary. Exposing that backend or bypassing its native Gitea privacy guard is unsupported. Local administrators/service-user compromise can read credentials and private archives. `noindex` is a crawler instruction, not authentication.
+The backend verifies Gitea credentials on every protected request; forged proxy identity headers do not grant access. Keep backends private because native Gitea privacy transitions still require the Nginx guard. Exposing backend ports or bypassing that guard is unsupported. Local administrators/service-user compromise can read credentials and private archives. `noindex` is a crawler instruction, not authentication.
 
 Do not attach database/configuration snapshots, raw archive exports, audit reports, App keys or environment files to issues. Rotate affected source/Gitea tokens and webhook secrets after accidental exposure; removing a committed secret from the latest tree does not remove it from Git history.
 

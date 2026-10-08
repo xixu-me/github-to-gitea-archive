@@ -20,7 +20,7 @@ Public, private, forked and archived repositories are included when the configur
 
 - Linux with systemd and Nginx, Python **3.11+**, Git and OpenSSL. Python runtime dependencies: **standard library only**.
 - A **local Gitea 28 instance backed by SQLite**, using WAL mode. The hook and native audit integration was developed against Gitea 28; other versions and database engines have not been validated.
-- A dedicated Gitea user or organization for the archive and a user API token with repository read/write permissions. No Gitea administrator token is required by the runtime.
+- A dedicated Gitea user or organization for the archive and a user API token with repository read/write and user-profile read permissions. No Gitea administrator token is required by the runtime.
 - An optional read-only GitHub App or PAT for private repositories. Public accounts can be polled without credentials, subject to GitHub's unauthenticated limits.
 - HTTPS and a public callback/webhook URL for the App setup and event-driven updates.
 

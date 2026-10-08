@@ -9,7 +9,7 @@ Configuration comes from environment variables or `--env-file`. Environment file
 | `GITEA_OWNER` | Source login; target Gitea user or organization |
 | `ARCHIVE_ADMIN_USER` | Target login; actual Gitea user authorized for the dashboard and hook pusher |
 | `GITEA_URL` | `http://127.0.0.1:3000`; internal Gitea base URL |
-| `GITEA_TOKEN` | Target namespace repository read/write token; required for worker and ingest |
+| `GITEA_TOKEN` | Target namespace repository read/write plus `read:user` token; required for worker and ingest |
 | `GITHUB_TOKEN` | Optional read-only PAT; ignored when App credentials exist |
 | `ARCHIVE_PUBLIC_URL` | HTTPS origin; required for App manifest/bootstrap; subpath deployment is not supported |
 | `GITHUB_APP_NAME` | Account-derived App name, maximum 34 characters |

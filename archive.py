@@ -2049,16 +2049,23 @@ class Handler(BaseHTTPRequestHandler):
                     },
                 )
                 return
-            # Nginx supplies trusted, authenticated identity, strips all client headers.
+            # Bootstrap is a short-lived capability. Every other archive read
+            # validates real Gitea credentials, even if a local client forges a
+            # proxy identity header. Loopback is not an authentication boundary.
             bootstrap = parsed.path.startswith("/bootstrap/")
             if bootstrap:
                 token = parsed.path.rsplit("/", 1)[-1]
                 if not consume_setup_token(c, "bootstrap_token", "bootstrap_expiry", token):
                     self.send(403, {"error": "invalid or expired setup link"})
                     return
-            if not bootstrap and self.headers.get("X-Archive-User") != ADMIN_USER:
-                self.send(403, {"error": "owner authentication required"})
-                return
+            if not bootstrap:
+                try:
+                    allowed = authenticated_owner(self.headers)
+                except (urllib.error.URLError, ValueError, OSError, http.client.HTTPException):
+                    allowed = False
+                if not allowed:
+                    self.send(403, {"error": "owner authentication required"})
+                    return
             path = urllib.parse.urlparse(self.path).path
             if path == "/setup" or bootstrap:
                 if (ROOT / "app.json").exists():

@@ -269,6 +269,38 @@ class BranchRefreshTests(unittest.TestCase):
 
 
 class WebBoundaryTests(unittest.TestCase):
+    def test_forged_proxy_identity_is_denied_and_real_credentials_work(self):
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            patch.object(a, "ROOT", Path(directory)),
+            patch.object(a, "ADMIN_USER", "maintainer"),
+            patch.object(
+                a,
+                "authenticated_owner",
+                side_effect=lambda headers: headers.get("Authorization") == "token test-only",
+            ),
+        ):
+            with contextlib.closing(a.db()):
+                pass
+            server = a.ThreadingHTTPServer(("127.0.0.1", 0), a.Handler)
+            thread = threading.Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            url = "http://127.0.0.1:" + str(server.server_port) + "/status.json"
+            try:
+                forged = urllib.request.Request(url, headers={"X-Archive-User": "maintainer"})
+                with self.assertRaises(urllib.error.HTTPError) as caught:
+                    urllib.request.urlopen(forged)
+                self.assertEqual(caught.exception.code, 403)
+                caught.exception.close()
+                valid = urllib.request.Request(url, headers={"Authorization": "token test-only"})
+                with urllib.request.urlopen(valid) as response:
+                    self.assertEqual(response.status, 200)
+                    self.assertEqual(response.headers["X-Robots-Tag"], "noindex, nofollow")
+            finally:
+                server.shutdown()
+                server.server_close()
+                thread.join()
+
     def test_anonymous_archive_is_denied_and_malformed_webhook_is_rejected(self):
         with (
             tempfile.TemporaryDirectory() as directory,
