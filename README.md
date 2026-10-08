@@ -1,4 +1,4 @@
-# GitHub Account Archive
+# GitHub to Gitea Archive
 
 A continuous, single-host archive of repositories owned by any GitHub **user or organization**, with a Gitea browsing interface. GitHub remains the source of truth. The service never pushes changes back to source repositories.
 
@@ -29,8 +29,8 @@ One installation archives **one account**. Use separate state directories, local
 ## Quick start
 
 ```sh
-git clone https://github.com/xixu-me/github-archive.git
-cd github-archive
+git clone https://github.com/xixu-me/github-to-gitea-archive.git
+cd github-to-gitea-archive
 python3 -m unittest discover -s tests -p 'test_*.py'
 
 # Install files without starting services or replacing an existing env file.

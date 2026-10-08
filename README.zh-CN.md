@@ -1,4 +1,4 @@
-# GitHub 账号持续归档
+# GitHub to Gitea Archive
 
 将任意 GitHub 用户或组织所拥有的仓库持续归档到同一台服务器，并通过 Gitea 浏览。来源始终是 GitHub，服务不会向 GitHub 仓库写回内容。
 
@@ -9,8 +9,8 @@
 运行环境为 Linux/systemd/Nginx、Python 3.11+、Git、OpenSSL，以及同机的 Gitea 28 + SQLite WAL；Python 运行时仅使用标准库。一套实例归档一个账号，更换账号须使用独立的数据目录和 Gitea 命名空间。
 
 ```sh
-git clone https://github.com/xixu-me/github-archive.git
-cd github-archive
+git clone https://github.com/xixu-me/github-to-gitea-archive.git
+cd github-to-gitea-archive
 python3 -m unittest discover -s tests -p 'test_*.py'
 sudo python3 scripts/install.py
 sudoedit /etc/gitea/github-archive.env

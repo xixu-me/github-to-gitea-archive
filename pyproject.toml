@@ -19,8 +19,8 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/xixu-me/github-archive"
-Issues = "https://github.com/xixu-me/github-archive/issues"
+Repository = "https://github.com/xixu-me/github-to-gitea-archive"
+Issues = "https://github.com/xixu-me/github-to-gitea-archive/issues"
 
 [project.scripts]
 github-archive = "archive:cli"
