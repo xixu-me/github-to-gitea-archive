@@ -1,0 +1,11 @@
+[Unit]
+Description=Consume GitHub webhook inbox promptly
+
+[Timer]
+OnBootSec=10s
+OnUnitInactiveSec=2s
+AccuracySec=1s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

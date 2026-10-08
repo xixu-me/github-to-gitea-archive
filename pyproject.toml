@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "github-account-archive"
+version = "0.1.0"
+description = "Read-only continuous GitHub user and organization archiving to local Gitea"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{name = "Xi Xu"}]
+dependencies = []
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: System :: Archiving :: Backup",
+]
+
+[project.urls]
+Repository = "https://github.com/xixu-me/github-archive"
+Issues = "https://github.com/xixu-me/github-archive/issues"
+
+[project.scripts]
+github-archive = "archive:cli"
+
+[tool.setuptools]
+py-modules = ["archive", "archive_config", "audit_common", "audit_children", "audit_code", "audit_metadata", "audit_projection", "audit_restore"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E9", "F"]

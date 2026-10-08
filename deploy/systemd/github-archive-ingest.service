@@ -1,0 +1,20 @@
+[Unit]
+Description=Transfer durable GitHub webhook inbox to archive queue
+After=network.target github-archive-web.service
+
+[Service]
+Type=oneshot
+User=git
+Group=git
+EnvironmentFile=/etc/gitea/github-archive.env
+ExecStart=/usr/local/lib/github-archive/archive.py ingest --limit 100
+TimeoutStartSec=180
+MemoryHigh=64M
+MemoryMax=96M
+TasksMax=32
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/github-archive /var/lib/gitea
+PrivateTmp=true

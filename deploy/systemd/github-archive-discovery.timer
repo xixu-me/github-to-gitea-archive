@@ -1,0 +1,11 @@
+[Unit]
+Description=Discover GitHub owner repositories independently every ten minutes
+
+[Timer]
+OnBootSec=60s
+OnUnitInactiveSec=10min
+AccuracySec=10s
+Unit=github-archive-discovery.service
+
+[Install]
+WantedBy=timers.target
