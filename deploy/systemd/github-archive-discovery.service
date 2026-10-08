@@ -1,0 +1,22 @@
+[Unit]
+Description=Independent GitHub archive repository discovery
+After=network-online.target github-archive-web.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=git
+Group=git
+EnvironmentFile=/etc/gitea/github-archive.env
+ExecStart=/usr/local/lib/github-archive/archive.py discover
+TimeoutStartSec=180
+Nice=10
+CPUQuota=25%
+MemoryMax=96M
+TasksMax=16
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/github-archive
+PrivateTmp=true

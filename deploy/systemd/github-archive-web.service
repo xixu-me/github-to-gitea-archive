@@ -1,0 +1,23 @@
+[Unit]
+Description=GitHub archive status and webhook receiver
+After=network.target
+
+[Service]
+User=git
+Group=git
+EnvironmentFile=/etc/gitea/github-archive.env
+ExecStart=/usr/local/lib/github-archive/archive.py serve
+Restart=on-failure
+RestartSec=5
+MemoryHigh=80M
+MemoryMax=120M
+TasksMax=32
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/github-archive
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

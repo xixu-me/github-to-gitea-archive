@@ -1,0 +1,11 @@
+[Unit]
+Description=Wake GitHub archive queue every minute
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=60s
+AccuracySec=5s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

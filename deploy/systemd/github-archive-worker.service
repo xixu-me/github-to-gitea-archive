@@ -1,0 +1,23 @@
+[Unit]
+Description=GitHub archive discovery and synchronization
+After=network-online.target gitea.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=git
+Group=git
+EnvironmentFile=/etc/gitea/github-archive.env
+ExecStart=/usr/local/lib/github-archive/archive.py work --limit 5
+TimeoutStartSec=infinity
+Nice=10
+CPUQuota=75%
+MemoryHigh=200M
+MemoryMax=320M
+TasksMax=64
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/github-archive /var/lib/gitea
+PrivateTmp=true
